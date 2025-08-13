@@ -31,38 +31,25 @@ review:
       description: "Ensure code quality standards"
       enabled: true
       severity: "medium"
-    
-    - name: "Performance"
-      description: "Identify performance issues"
-      enabled: true
-      severity: "medium"
-    
-    - name: "Documentation"
-      description: "Check documentation quality"
-      enabled: true
-      severity: "low"
 
 analysis:
-  depth: "comprehensive"
+  depth: "medium"
   language_specific:
     typescript:
       enabled: true
-      strict_mode: true
+      strict: true
     javascript:
       enabled: true
     json:
       enabled: true
 
 notifications:
-  slack: false
-  email: false
-  github: true
+  enabled: true
+  channels:
+    - "github"
+    - "slack"
 
-custom:
-  project_type: "nestjs"
-  framework: "nestjs"
-  package_manager: "pnpm"
-  node_version: "20"
-  test_framework: "jest"
-  linting: "eslint"
-  formatting: "prettier" 
+project_settings:
+  auto_merge: false
+  require_reviews: 1
+  merge_strategy: "squash" 

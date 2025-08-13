@@ -1,0 +1,60 @@
+# Compiled output
+/dist
+/build
+*.tsbuildinfo
+
+# Dependencies
+/node_modules
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Test coverage
+/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Environment variables
+.env
+.env.test
+.env.production
+.env.local
+.env.*.local
+
+# Package manager files
+package-lock.json
+yarn.lock
+# Keep pnpm-lock.yaml for pnpm
+
+# Temporary files
+*.tmp
+*.temp
+.cache/ 

@@ -21,7 +21,14 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "depcheck": "depcheck",
-    "madge": "madge --circular src/"
+    "madge": "madge --circular src/",
+    "docker:build": "docker build -t nestjs-boilerplate .",
+    "docker:run": "docker run -p 3000:3000 nestjs-boilerplate",
+    "docker:dev": "docker-compose up",
+    "docker:dev:build": "docker-compose up --build",
+    "docker:prod": "docker-compose -f docker-compose.yml up app-prod",
+    "docker:stop": "docker-compose down",
+    "docker:clean": "docker system prune -f"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

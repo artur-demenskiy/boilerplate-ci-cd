@@ -1,0 +1,107 @@
+# CodeRabbit Configuration
+# This file configures CodeRabbit for automated code review and analysis
+
+# Repository settings
+repository:
+  # Enable CodeRabbit for this repository
+  enabled: true
+  
+  # Set the default branch
+  default_branch: main
+  
+  # Configure file patterns to include/exclude
+  include_patterns:
+    - "src/**/*"
+    - "test/**/*"
+    - "*.ts"
+    - "*.js"
+    - "*.json"
+    - "*.yml"
+    - "*.yaml"
+    - "*.md"
+  
+  exclude_patterns:
+    - "node_modules/**/*"
+    - "dist/**/*"
+    - "build/**/*"
+    - "*.lock"
+    - ".git/**/*"
+
+# Code review settings
+review:
+  # Enable automated code review
+  enabled: true
+  
+  # Set review rules
+  rules:
+    - name: "Security Check"
+      description: "Check for potential security vulnerabilities"
+      enabled: true
+      
+    - name: "Code Quality"
+      description: "Check code quality and best practices"
+      enabled: true
+      
+    - name: "Performance"
+      description: "Check for performance issues"
+      enabled: true
+      
+    - name: "Documentation"
+      description: "Check for proper documentation"
+      enabled: true
+
+# Analysis settings
+analysis:
+  # Enable code analysis
+  enabled: true
+  
+  # Set analysis depth
+  depth: "comprehensive"
+  
+  # Configure language-specific settings
+  languages:
+    typescript:
+      enabled: true
+      strict: true
+      
+    javascript:
+      enabled: true
+      strict: false
+      
+    json:
+      enabled: true
+      validate: true
+
+# Notification settings
+notifications:
+  # Enable notifications
+  enabled: true
+  
+  # Configure notification channels
+  channels:
+    - type: "github"
+      enabled: true
+      
+    - type: "slack"
+      enabled: false
+      webhook_url: ""
+      
+    - type: "email"
+      enabled: false
+      recipients: []
+
+# Custom settings
+custom:
+  # Project-specific settings
+  project_type: "nestjs"
+  
+  # Framework-specific rules
+  framework:
+    name: "nestjs"
+    version: "11.x"
+    
+  # Additional checks
+  additional_checks:
+    - "dependency-updates"
+    - "license-compliance"
+    - "code-coverage" 

@@ -21,78 +21,152 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+# NestJS Boilerplate with CI/CD Pipeline
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+A production-ready NestJS boilerplate with comprehensive CI/CD pipeline, automated testing, and code quality checks.
 
-## Project setup
+## Features
+
+- 🚀 **NestJS 11** - Latest version with TypeScript 5.7+
+- 🔧 **Complete CI/CD Pipeline** - GitHub Actions workflows
+- 📦 **pnpm** - Fast, disk space efficient package manager
+- 🧪 **Automated Testing** - Jest with coverage reporting
+- 📝 **Code Quality** - ESLint, Prettier, and automated checks
+- 🔍 **CodeRabbit Integration** - Automated code review
+- 🚀 **Staging Deployment** - Automated staging environment deployment
+- 🔒 **Security Audits** - Automated dependency vulnerability scanning
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm 10.12.3+
+
+### Installation
 
 ```bash
-$ npm install
+# Clone the repository
+git clone <your-repo-url>
+cd nestjs-boilerplate
+
+# Install dependencies
+pnpm install
+
+# Start development server
+pnpm run start:dev
 ```
 
-## Compile and run the project
+### Available Scripts
 
 ```bash
-# development
-$ npm run start
+# Development
+pnpm run start:dev          # Start in watch mode
+pnpm run start:debug        # Start in debug mode
 
-# watch mode
-$ npm run start:dev
+# Building
+pnpm run build              # Build the application
+pnpm run start:prod         # Start production build
 
-# production mode
-$ npm run start:prod
+# Testing
+pnpm run test               # Run unit tests
+pnpm run test:watch         # Run tests in watch mode
+pnpm run test:cov           # Run tests with coverage
+pnpm run test:e2e           # Run end-to-end tests
+
+# Code Quality
+pnpm run lint               # Run ESLint
+pnpm run format             # Format code with Prettier
+pnpm run format:check       # Check code formatting
 ```
 
-## Run tests
+## CI/CD Pipeline
 
-```bash
-# unit tests
-$ npm run test
+### Workflows
 
-# e2e tests
-$ npm run test:e2e
+1. **CI/CD Pipeline** (`.github/workflows/ci-cd.yml`)
+   - Linting and formatting checks
+   - Unit and e2e tests
+   - Build verification
+   - Security audits
+   - Staging deployment
 
-# test coverage
-$ npm run test:cov
+2. **PR Checks** (`.github/workflows/pr-checks.yml`)
+   - Code quality analysis
+   - Bundle size checks
+   - TypeScript compilation
+   - Dependency analysis
+   - Circular dependency detection
+
+3. **Staging Deployment** (`.github/workflows/staging-deploy.yml`)
+   - Automated staging deployment
+   - Deployment notifications
+
+### Automated Checks
+
+- ✅ **ESLint** - Code quality and style
+- ✅ **Prettier** - Code formatting
+- ✅ **Jest** - Unit and integration tests
+- ✅ **TypeScript** - Type checking
+- ✅ **Security Audit** - Dependency vulnerabilities
+- ✅ **Bundle Analysis** - Size and dependency checks
+- ✅ **Code Coverage** - Test coverage reporting
+
+## Project Structure
+
 ```
+nestjs-boilerplate/
+├── .github/workflows/     # GitHub Actions workflows
+├── src/                   # Application source code
+├── test/                  # Test files
+├── .coderabbit.yaml      # CodeRabbit configuration
+├── .npmrc                # pnpm configuration
+├── .gitignore            # Git ignore patterns
+└── package.json          # Project dependencies
+```
+
+## Configuration
+
+### pnpm Configuration (`.npmrc`)
+
+- Strict peer dependency resolution
+- Hoisted node modules
+- Side-effects caching
+- Exact version saving
+
+### CodeRabbit Configuration (`.coderabbit.yaml`)
+
+- Automated code review
+- Security vulnerability detection
+- Code quality analysis
+- Performance optimization suggestions
+
+## Contributing
+
+1. Create a feature branch from `staging`
+2. Make your changes
+3. Run tests: `pnpm run test`
+4. Check code quality: `pnpm run lint`
+5. Format code: `pnpm run format`
+6. Submit a pull request
 
 ## Deployment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Staging
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Automatically deployed on push to `staging` branch.
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+### Production
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Deploy from `main` branch after successful staging deployment.
 
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+For issues and questions:
+- Create an issue in the repository
+- Check the CI/CD pipeline logs
+- Review the automated code review feedback
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License.

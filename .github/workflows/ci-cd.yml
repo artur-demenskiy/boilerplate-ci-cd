@@ -19,33 +19,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Setup pnpm
+      - name: Настройка pnpm
         uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
       
-      - name: Setup Node.js
+      - name: Настройка Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
       
-      - name: Install dependencies
+      - name: Установка зависимостей
         run: pnpm install --frozen-lockfile
       
-      - name: Run linting
+      - name: Запуск линтера
         run: pnpm lint
       
-      - name: Check formatting
+      - name: Проверка форматирования
         run: pnpm format:check
       
-      - name: Run unit tests
+      - name: Запуск unit тестов
         run: pnpm test
       
-      - name: Run e2e tests
+      - name: Запуск e2e тестов
         run: pnpm test:e2e
       
-      - name: Build application
+      - name: Сборка приложения
         run: pnpm build
 
   # Docker сборка для всех событий
@@ -55,15 +55,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Set up Docker Buildx
+      - name: Настройка Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Build Docker image
+      - name: Сборка Docker образа
         run: |
           docker build -t app:test .
           docker images
       
-      - name: Test Docker image
+      - name: Тестирование Docker образа
         run: |
           docker run --rm -d --name test-app -p 3000:3000 app:test
           sleep 10
@@ -77,24 +77,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Setup pnpm
+      - name: Настройка pnpm
         uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
       
-      - name: Setup Node.js
+      - name: Настройка Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
       
-      - name: Install dependencies
+      - name: Установка зависимостей
         run: pnpm install --frozen-lockfile
       
-      - name: Run security audit
+      - name: Запуск аудита безопасности
         run: pnpm audit
       
-      - name: Check for outdated packages
+      - name: Проверка устаревших пакетов
         run: pnpm outdated || true
 
   # Деплой в development окружение (только при push в development)
@@ -106,18 +106,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Set up Docker Buildx
+      - name: Настройка Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Build and push Docker image for development
+      - name: Сборка и отправка Docker образа для development
         run: |
           docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development .
-          echo "Docker image built successfully for development"
+          echo "Docker образ успешно собран для development"
       
-      - name: Deploy to development
+      - name: Деплой в development
         run: |
-          echo "Deploying to development environment..."
-          echo "Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development"
+          echo "Деплой в development окружение..."
+          echo "Docker образ: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development"
           # Добавьте ваши команды деплоя для development
 
   # Деплой в production (только при push в main)
@@ -129,17 +129,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Set up Docker Buildx
+      - name: Настройка Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Build and push Docker image for production
+      - name: Сборка и отправка Docker образа для production
         run: |
           docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest .
           docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
-          echo "Docker image built successfully for production"
+          echo "Docker образ успешно собран для production"
       
-      - name: Deploy to production
+      - name: Деплой в production
         run: |
-          echo "Deploying to production environment..."
-          echo "Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+          echo "Деплой в production окружение..."
+          echo "Docker образ: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
           # Добавьте ваши команды деплоя для production 

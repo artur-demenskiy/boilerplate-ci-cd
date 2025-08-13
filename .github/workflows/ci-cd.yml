@@ -13,91 +13,91 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  # Основные проверки для всех событий
+  # Main checks for all events
   lint-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
-      - name: Настройка pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
       
-      - name: Настройка Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
       
-      - name: Установка зависимостей
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
       
-      - name: Запуск линтера
+      - name: Run linting
         run: pnpm lint
       
-      - name: Проверка форматирования
+      - name: Check formatting
         run: pnpm format:check
       
-      - name: Запуск unit тестов
+      - name: Run unit tests
         run: pnpm test
       
-      - name: Запуск e2e тестов
+      - name: Run e2e tests
         run: pnpm test:e2e
       
-      - name: Сборка приложения
+      - name: Build application
         run: pnpm build
 
-  # Docker сборка для всех событий
+  # Docker build for all events
   docker-build:
     runs-on: ubuntu-latest
     needs: lint-and-test
     steps:
       - uses: actions/checkout@v4
       
-      - name: Настройка Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Сборка Docker образа
+      - name: Build Docker image
         run: |
           docker build -t app:test .
           docker images
       
-      - name: Тестирование Docker образа
+      - name: Test Docker image
         run: |
           docker run --rm -d --name test-app -p 3000:3000 app:test
           sleep 10
           curl -f http://localhost:3000/ || exit 1
           docker stop test-app
 
-  # Проверка безопасности для всех событий
+  # Security scan for all events
   security-scan:
     runs-on: ubuntu-latest
     needs: lint-and-test
     steps:
       - uses: actions/checkout@v4
       
-      - name: Настройка pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
       
-      - name: Настройка Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
       
-      - name: Установка зависимостей
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
       
-      - name: Запуск аудита безопасности
+      - name: Run security audit
         run: pnpm audit
       
-      - name: Проверка устаревших пакетов
+      - name: Check for outdated packages
         run: pnpm outdated || true
 
-  # Деплой в development окружение (только при push в development)
+  # Deploy to development environment (only on push to development)
   deploy-development:
     runs-on: ubuntu-latest
     needs: [lint-and-test, docker-build, security-scan]
@@ -106,21 +106,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Настройка Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Сборка и отправка Docker образа для development
+      - name: Build and push Docker image for development
         run: |
           docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development .
-          echo "Docker образ успешно собран для development"
+          echo "Docker image built successfully for development"
       
-      - name: Деплой в development
+      - name: Deploy to development
         run: |
-          echo "Деплой в development окружение..."
-          echo "Docker образ: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development"
-          # Добавьте ваши команды деплоя для development
+          echo "Deploying to development environment..."
+          echo "Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development"
+          # Add your deployment commands for development
 
-  # Деплой в production (только при push в main)
+  # Deploy to production (only on push to main)
   deploy-production:
     runs-on: ubuntu-latest
     needs: [lint-and-test, docker-build, security-scan]
@@ -129,17 +129,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Настройка Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Сборка и отправка Docker образа для production
+      - name: Build and push Docker image for production
         run: |
           docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest .
           docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
-          echo "Docker образ успешно собран для production"
+          echo "Docker image built successfully for production"
       
-      - name: Деплой в production
+      - name: Deploy to production
         run: |
-          echo "Деплой в production окружение..."
-          echo "Docker образ: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-          # Добавьте ваши команды деплоя для production 
+          echo "Deploying to production environment..."
+          echo "Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+          # Add your deployment commands for production 

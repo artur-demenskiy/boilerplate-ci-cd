@@ -1,0 +1,72 @@
+name: release-doc
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  release_notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call OpenAI Responses API with Zapier MCP
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ZAP_MCP_URL: ${{ secrets.ZAP_MCP_URL }}
+          ZAP_MCP_KEY: ${{ secrets.ZAP_MCP_KEY }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+          ACTOR: ${{ github.actor }}
+          COMMIT_URL: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          TS: ${{ github.event.head_commit.timestamp }}
+        run: |
+          NOW="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+          jq -n \
+            --arg repo "$REPO" \
+            --arg branch "$BRANCH" \
+            --arg sha "$SHA" \
+            --arg actor "$ACTOR" \
+            --arg msg "$COMMIT_MESSAGE" \
+            --arg url "$COMMIT_URL" \
+            --arg ts "$TS" \
+            --arg now "$NOW" \
+            --arg mcp_url "$ZAP_MCP_URL" \
+            --arg mcp_key "$ZAP_MCP_KEY" \
+            '{
+              model: "gpt-4.1-mini",
+              tool_choice: "required",
+              tools: [
+                {
+                  type: "mcp",
+                  server_label: "zapier",
+                  server_url: $mcp_url,
+                  require_approval: "never",
+                  headers: { Authorization: ("Bearer " + $mcp_key) }
+                }
+              ],
+              input: (
+                "Ты — агент релизов. На входе JSON; сгенерируй Markdown release notes и " +
+                "ВЫЗОВИ MCP tool Google Docs: Create Document From Text " +
+                "(id: google_docs_create_document_from_text) " +
+                "с полями: Document Name = \"Release Notes " + $branch + " — " + $now + "\", " +
+                "Document Content = сгенерированный Markdown. " +
+                "JSON:\n" +
+                ( {repo:$repo, branch:$branch, sha:$sha, actor:$actor, commit_message:$msg, commit_url:$url, timestamp:$ts, triggered_at:$now} | tojson ) + "\n\n" +
+                "Формат Markdown:\n" +
+                "# Release " + $branch + " — " + ($sha|.[0:7]) + "\n" +
+                "**Дата:** " + $now + "\n\n" +
+                "## Highlights\n- 3–7 кратких пункта из commit_message\n\n" +
+                "## Детали\n- Commit: [" + ($sha|.[0:7]) + "](" + $url + ") — " + $msg + "\n- Автор пуша: " + $actor + "\n\n" +
+                "## Метаданные\n- Репозиторий: " + $repo + "\n\n" +
+                "Правила: не выдумывай факты; используй только поля JSON."
+              )
+            }' > /tmp/body.json
+
+          curl -sS https://api.openai.com/v1/responses \
+            -H "Authorization: Bearer $OPENAI_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/body.json
+
+      - name: Done
+        run: echo "Release notes request sent to OpenAI (with Zapier MCP tools)." 

@@ -1,0 +1,68 @@
+# CodeRabbit Configuration
+# Automated code review and analysis
+
+repository:
+  enabled: true
+  default_branch: main
+  include_patterns:
+    - "src/**/*"
+    - "test/**/*"
+    - "*.ts"
+    - "*.js"
+    - "*.json"
+    - "*.yml"
+    - "*.yaml"
+    - "*.md"
+  exclude_patterns:
+    - "node_modules/**/*"
+    - "dist/**/*"
+    - "coverage/**/*"
+    - "*.lock"
+    - ".git/**/*"
+
+review:
+  rules:
+    - name: "Security"
+      description: "Check for security vulnerabilities"
+      enabled: true
+      severity: "high"
+    
+    - name: "Code Quality"
+      description: "Ensure code quality standards"
+      enabled: true
+      severity: "medium"
+    
+    - name: "Performance"
+      description: "Identify performance issues"
+      enabled: true
+      severity: "medium"
+    
+    - name: "Documentation"
+      description: "Check documentation quality"
+      enabled: true
+      severity: "low"
+
+analysis:
+  depth: "comprehensive"
+  language_specific:
+    typescript:
+      enabled: true
+      strict_mode: true
+    javascript:
+      enabled: true
+    json:
+      enabled: true
+
+notifications:
+  slack: false
+  email: false
+  github: true
+
+custom:
+  project_type: "nestjs"
+  framework: "nestjs"
+  package_manager: "pnpm"
+  node_version: "20"
+  test_framework: "jest"
+  linting: "eslint"
+  formatting: "prettier" 
